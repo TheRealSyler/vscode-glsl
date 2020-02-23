@@ -7,7 +7,6 @@
     "icon": "resources/images/icon.ico",
     "vscode": "syler.glsl",
     "badges": [
-      "circleci circleci",
       "vscV vscode",
       "vscD vscode",
       "vscI vscode",

@@ -1,0 +1,155 @@
+{
+  "$schema": "./$schema.json",
+  "const": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `const` is used for variables that are compile-time constants or for function parameters that are `read-only`."
+  },
+  "attribute": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `attribute` is used to declare variables that are shared between a vertex shader and the OpenGL ES environment. \n\nSince the vertex shader is executed one time for each vertex attributes are used to specify per vertex data. They typically provide data such as the object space position, the normal direction and the texture coordinates of a vertex. Attributes are read-only variables, i.e. their value can not be changed in the vertex shader. \n\nSide note: Since an attribute is never initialized in the shader it has to be loaded with data by the application executing the shader."
+  },
+  "uniform": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `uniform` is used to declare variables that are shared between a shader and the OpenGL ES environment.\n\nUniforms can be used in the vertex shader and the fragment shader and they must have global scope. The same uniform variable can be used in the vertex and the fragment shader, but since both shaders share the same name space the declaration has to be identical. Uniforms are used to specify properties of the object that is rendered. Examples are the projection matrix, the light position or the material color of the object. Uniforms are `read-only` variables, i.e. their value can not be changed in the shader.\n\nSide note: Since a uniform is never initialized in the shader it has to be loaded with data by the application executing the shader."
+  },
+  "varying": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `varying` is used to declare variables that are shared between the vertex shader and the fragment shader.\n\nVarying are used for information that is calculated in the vertex shader and should be handed over to the fragment shader. Both shaders have to declare the varying and the declarations must be identical. The vertex shader initializes the varying for each vertex. After that the per vertex data of the varying is interpolated during rasterization before being handed over to the fragment shader.\n\nThe varying qualifier can only be used with floating point scalar, floating point vectors and (floating point) matrices as well as arrays containing these types."
+  },
+  "highp": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `highp` is used to specify the highest available precision for a variable. The variable has to be an integer or a floating point scalar or a vector or matrix based on these types. The precision qualifier precedes the type in the variable declaration.\n\nIn the vertex shader the use of a precision qualifier is optional. If no qualifier is given all variables are of highest precision. In the fragment shader a precision qualifier has to be used when declaring a variable unless a default precision has been defined for the specific type.\n\n```glsl\nuniform highp vec3 lightDirection;\n```\n\nThe actual range corresponding to a precision qualifier is dependent on the specific OpenGL ES implementation. Using a lower precision might have a positive effect on performance (frame rates) and power efficiency but might also cause a loss in rendering quality. The appropriate trade-off can only be determined by testing different precision configurations."
+  },
+  "mediump": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `mediump` is used to specify a precision between the highest and lowest available precision for a variable. The variable has to be an integer or a floating point scalar or a vector or matrix based on these types. The precision qualifier precedes the type in the variable declaration.\n\nIn the vertex shader the use of a precision qualifier is optional. If no qualifier is given all variables are of highest precision. In the fragment shader a precision qualifier has to be used when declaring a variable unless a default precision has been defined for the specific type.\n\n```glsl\nvarying mediump vec2 textureCoordinate;\n```\n\nThe actual range corresponding to a precision qualifier is dependent on the specific OpenGL ES implementation. Using a lower precision might have a positive effect on performance (frame rates) and power efficiency but might also cause a loss in rendering quality. The appropriate trade-off can only be determined by testing different precision configurations."
+  },
+  "lowp": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The qualifier `lowp` is used to specify the lowest available precision for a variable. The variable has to be an integer or a floating point scalar or a vector or matrix based on these types. The precision qualifier precedes the type in the variable declaration.\n\nIn the vertex shader the use of a precision qualifier is optional. If no qualifier is given all variables are of highest precision. In the fragment shader a precision qualifier has to be used when declaring a variable unless a default precision has been defined for the specific type.\n\n```glsl\nvarying lowp vec4 colorVarying;\n```\n\nThe actual range corresponding to a precision qualifier is dependent on the specific OpenGL ES implementation. Using a lower precision might have a positive effect on performance (frame rates) and power efficiency but might also cause a loss in rendering quality. The appropriate trade-off can only be determined by testing different precision configurations."
+  },
+  "precision": {
+    "if": "empty",
+    "kind": "Keyword",
+    "desc": "The keyword `precision` is used in conjunction with a precision qualifier and a data type to specify the default precision for that data type. The type has to be an integer or a floating point scalar or a vector or matrix based on these types.\n\nIn the vertex shader all variables are of highest precision by default. The default can be changed defining another default precision. In the fragment shader a precision qualifier has to be used when declaring a variable unless a default precision has been defined for the specific type.\n\n```glsl\n\nprecision highp float;\n```\n\nThe actual range corresponding to a precision qualifier is dependent on the specific OpenGL ES implementation. Using a lower precision might have a positive effect on performance (frame rates) and power efficiency but might also cause a loss in rendering quality. The appropriate trade-off can only be determined by testing different precision configurations."
+  },
+  "in": {
+    "desc": "The qualifier `in` is used to mark a parameter as read-only when a function is declared. The parameter will be passed by value to the function and the value can not be modified by the function.\n\n```glsl\nint newFunction(in bvec4 aBvec4,   // read-only \nout vec3 aVec3,    // write-only\ninout int aInt);   // read-write\n```\n\nThe above function declaration shows the three possible parameter qualifiers. The usage of the read-only qualifier is not necessary since this is the default if no qualifier is specified.",
+    "if": "parameter",
+    "kind": "Keyword"
+  },
+  "out": {
+    "kind": "Keyword",
+    "desc": "The qualifier `out` is used to mark a parameter as write-only when a function is declared. The parameter will be passed by reference to the function but it is not initialized, i.e. the value can not be read. The value can be modified by the function and the changes are preserved after the function exits.\n\n```glsl\n\nint newFunction(in bvec4 aBvec4,   // read-only\nout vec3 aVec3,    // write-only\ninout int aInt);   // read-write\n```\n\nThe above function declaration shows the three possible parameter qualifiers. The usage of the read-only qualifier is not necessary since this is the default if no qualifier is specified.",
+    "if": "parameter"
+  },
+  "inout": {
+    "desc": "The qualifier `inout` is used to mark a parameter as read-write when a function is declared. The parameter will be passed by reference to the function and is initialized, i.e. the value can be read. The value can be modified by the function and the changes are preserved after the function exits.\n\n```glsl\nint newFunction(in bvec4 aBvec4,   // read-only\nout vec3 aVec3,    // write-only\ninout int aInt);   // read-write\n```\n\nThe above function declaration shows the three possible parameter qualifiers. The usage of the read-only qualifier is not necessary since this is the default if no qualifier is specified.",
+    "if": "parameter",
+    "kind": "Keyword"
+  },
+  "void": {
+    "desc": "```glsl\nvoid main(void);\nint aFunction(void);\nvoid bFunction(float);\n```\n\nThe data type `void` is used when the parameter list of a function is empty and when a function does not return a value.",
+    "if": "empty",
+    "insertText": "void $1 ($2)\n{\n\t$0\n}",
+    "kind": "Function"
+  },
+  "bool": {
+    "desc": "```glsl\nbool aBool = true;\nbool bBool = bool(aInt);\nbool cBool = bool(aFloat);\n```\nThe data type `bool` is used for boolean values (true or false).\n\nSide note: Implicit type conversions are not supported. Type conversions can be done using constructors as shown in the second and third example.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "int": {
+    "desc": "```glsl\nint aInt = 42;\nint bInt = int(aBool);\nint cInt = int(aFloat);\n```\nThe data type `int` is used for integer values.\n\nSide note: Implicit type conversions are not supported. Type conversions can be done using constructors as shown in the second and third example.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "float": {
+    "desc": "```glsl\nfloat aFloat = 1.0;\nfloat bFloat = float(aBool);\nfloat cFloat = float(aInt);\n```\nThe data type `float` is used for floating point (scalar) values.\n\nSide note: Implicit type conversions are not supported. Type conversions can be done using constructors as shown in the second and third example.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "bvec2": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nbvec2 aBvec2 = bvec2(true, true);\nbvec2 bBvec2 = bvec2(true);\n\nbvec2 cBvec2 = bvec2(aBvec3);\nbvec2 dBvec2 = bvec2(aBvec3.x, aBvec3.y);\n```\nThe data type `bvec2` is used for boolean vectors with two components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "bvec3": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec3 aBvec3 = bvec2(true, true, true);\nvec3 bBvec3 = bvec3(true);\n\nbvec3 cBvec3 = bvec3(aBvec4);\nvec3 dBvec3 = bvec3(aBvec4.x, aBvec4.y, aBvec4.z);\nvec3 eBvec3 = bvec3(aBvec2, aBool);\nvec3 fBvec3 = bvec3(aBvec2.x, aBvec2.y, aBool);\n```\nThe data type `bvec3` is used for boolean vectors with three components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\nComponents are specified by providing a combination of vectors and/or scalars. The respective values are used to initialize the vector (the fifth and sixth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "bvec4": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec4 aBvec4 = bvec4(true, true, true, true);\nvec4 bBvec4 = bvec4(true);\n\nvec4 cBvec4 = bvec4(aBvec2, aBool, aBvec3);\nvec4 dBvec4 = bvec4(aBvec2.x, aBvec2.y, aBool, aBvec3.x);\n```\nThe data type `bvec4` is used for boolean vectors with four components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components (the third and fourth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "ivec2": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nbvec2 aIvec2 = ivec2(1, 1);\nbvec2 bIvec2 = ivec2(1);\n\nbvec2 cIvec2 = ivec2(aIvec3);\nbvec2 dIvec2 = ivec2(aIvec3.x, aIvec3.y);\n```\nThe data type `ivec2` is used for integer vectors with two components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "ivec3": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec3 aIvec3 = ivec3(1, 1, 1);\nvec3 bIvec3 = ivec3(1);\n\nvec3 cIvec3 = ivec3(aIvec4);\nvec3 dIvec3 = ivec3(aIvec4.x, aIvec4.y, aIvec4.z);\n\nvec3 eIvec3 = ivec3(aIvec2, aInt);\nvec3 fIvec3 = ivec3(aIvec2.x, aIvec2.y, aInt);\n```\nThe data type `ivec3` is used for integer vectors with three components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\nComponents are specified by providing a combination of vectors and/or scalars. The respective values are used to initialize the vector (the fifth and sixth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "ivec4": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec4 aIvec4 = ivec4(1, 1, 1, 1);\nvec4 bIvec4 = ivec4(1);\n\nvec4 cIvec4 = ivec4(aIvec2, aInteger, aIvec3);\nvec4 dIvec4 = ivec4(aIvec2.x, aIvec2.y, aInt, aIvec3.x);\n```\nThe data type `ivec4` is used for integer vectors with four components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components (the third and fourth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "vec2": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec2 aVec2 = vec2(1.0, 1.0);\nvec2 bVec2 = vec2(1.0);\n\nvec2 cVec2 = vec2(aVec3);\nvec2 dVec2 = vec2(aVec3.x, aVec3.y);\n```\nThe data type `vec2` is used for  floating point vectors with two components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "vec3": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec3 aVec3 = vec3(1.0, 1.0, 1.0);\nvec3 bVec3 = vec3(1.0);\n\nvec3 cVec3 = vec3(aVec4);\nvec3 dVec3 = vec3(aVec4.x, aVec4.y, aVec4.z);\n\nvec3 eVec3 = vec3(aVec2, aFloat);\nvec3 fVec3 = vec3(aVec2.x, aVec2.y, aFloat);\n```\nThe data type `vec3` is used for floating point vectors with three components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a vector of higher dimension. The respective values are used to initialize the components (the second and third example are equivalent).\nComponents are specified by providing a combination of vectors and/or scalars. The respective values are used to initialize the vector (the fifth and sixth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "vec4": {
+    "if": "empty",
+    "kind": "Variable",
+    "desc": "```glsl\nvec4 aVec4 = vec4(1.0, 1.0, 1.0, 1.0);\nvec4 bVec4 = vec4(1.0);\n\nvec4 cVec4 = vec4(aVec2, aFloat, aVec3);\nvec4 dVec4 = vec4(aVec2.x, aVec2.y, aFloat, aVec3.x);\n```\nThe data type `vec4` is used for floating point vectors with four components. There are several ways to initialize a vector:\n\nComponents are specified by providing a scalar value for each component (first example).\nComponents are specified by providing one scalar value. This value is used for all components (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components (the third and fourth example are equivalent). The arguments of the constructor must have at least as many components as the vector that is initialized.\n\nSide note: The vector constructors can be used to cast between different vector types since type conversions are done automatically for each component."
+  },
+  "mat2": {
+    "desc": "```glsl\nmat2 aMat2 = mat2(1.0, 0.0,\n                  0.0, 1.0);\nmat2 bMat2 = mat2(1.0);\n\nmat2 cMat2 = mat2(aVec2, bVec2);\nmat2 dMat2 = mat2(aVec3, aFloat);\n```\nThe data type `mat2`  is used for floating point matrices with two times two components in column major order. There are several ways to initialize a matrix:\n\nComponents are specified by providing a scalar value for each component (first example). The matrix is filled column by column.\nComponents are specified by providing one scalar value. This value is used for the components on the main diagonal (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components column by column. The arguments of the constructor must have at least as many components as the matrix that is initialized.\nThe following examples show how the values of a matrix can be accessed to set or get the values:\n\n```glsl\nmat2 aMat2;\naMat2[1][1] = 1.0;\nfloat aFloat = aMat2[1][1];\n\naMat2[0] = vec2(1.0);\nvec2 aVec2 = aMat2[0];\n```\n\nThe values of a matrix can be accessed component-wise or column by column:\n\n\nIn the first example the bottom right component of a matrix is set to a float value.\nIn the second example a new variable of type float is initialized with the value of the bottom right component of a matrix.\nIn the third example the first column vector of a matrix is set with a vector.\nIn the fourth example a new variable of type float vector is initialized with the column vector.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "mat3": {
+    "desc": "```glsl\nmat3 aMat3 = mat3(1.0, 0.0, 0.0,\n                  0.0, 1.0, 0.0,\n                  0.0, 0.0, 1.0);\nmat3 bMat3 = mat3(1.0);\n\nmat3 cMat3 = mat3(aVec3, bVec3, cVec3);\nmat3 dMat3 = mat3(aVec4, aVec3, bVec4, aFloat);\n```\nThe data type `mat3`  is used for floating point matrices with three times three components in column major order. There are several ways to initialize a matrix:\n\nComponents are specified by providing a scalar value for each component (first example). The matrix is filled column by column.\nComponents are specified by providing one scalar value. This value is used for the components on the main diagonal (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components column by column. The arguments of the constructor must have at least as many components as the matrix that is initialized.\nThe following examples show how the values of a matrix can be accessed to set or get the values:\n\n```glsl\nmat2 aMat2;\naMat2[1][1] = 1.0;\nfloat aFloat = aMat2[1][1];\n\naMat2[0] = vec2(1.0);\nvec2 aVec2 = aMat2[0];\n```\n\nThe values of a matrix can be accessed component-wise or column by column:\n\n\nIn the first example the bottom right component of a matrix is set to a float value.\nIn the second example a new variable of type float is initialized with the value of the bottom right component of a matrix.\nIn the third example the first column vector of a matrix is set with a vector.\nIn the fourth example a new variable of type float vector is initialized with the column vector.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "mat4": {
+    "desc": "```glsl\nmat4 aMat4 = mat4(1.0, 0.0, 0.0, 0.0,\n                  0.0, 1.0, 0.0, 0.0,\n                  0.0, 0.0, 1.0, 0.0,\n                  0.0, 0.0, 0.0, 1.0);\nmat4 bMat4 = mat4(1.0);\n\nmat4 cMat4 = mat4(aVec4, bVec4, cVec4, dVec4);\nmat4 dMat4 = mat4(aVec4, aVec3, bVec4, cVec4, aFloat);\n```\nThe data type `mat4`  is used for floating point matrices with four times four components in column major order. There are several ways to initialize a matrix:\n\nComponents are specified by providing a scalar value for each component (first example). The matrix is filled column by column.\nComponents are specified by providing one scalar value. This value is used for the components on the main diagonal (the second example is equivalent to the first).\nComponents are specified by providing a combination of vectors and scalars. The respective values are used to initialize the components column by column. The arguments of the constructor must have at least as many components as the matrix that is initialized.\nThe following examples show how the values of a matrix can be accessed to set or get the values:\n\n```glsl\nmat2 aMat2;\naMat2[1][1] = 1.0;\nfloat aFloat = aMat2[1][1];\n\naMat2[0] = vec2(1.0);\nvec2 aVec2 = aMat2[0];\n```\n\nThe values of a matrix can be accessed component-wise or column by column:\n\n\nIn the first example the bottom right component of a matrix is set to a float value.\nIn the second example a new variable of type float is initialized with the value of the bottom right component of a matrix.\nIn the third example the first column vector of a matrix is set with a vector.\nIn the fourth example a new variable of type float vector is initialized with the column vector.",
+    "if": "empty",
+    "kind": "Variable"
+  },
+  "sampler2D": {
+    "desc": "```glsl\nuniform sampler2D texture;\n```\nThe data type `sampler2D` is used to provide access to a 2D texture. It can only be declared as a uniform variable since it is a reference to data that has been loaded to a texture unit.\n\nSide note: On iOS devices this data type can only be used in the fragment shader since they don't have texture image units that can be accessed by the vertex shader.",
+    "kind": "Variable",
+    "if": "empty"
+  },
+  "samplerCube": {
+    "desc": "```glsl\nuniform samplerCube texture;\n```\nThe data type `samplerCube` is used to provide access to a cubemap texture. It can only be declared as a uniform variable since it is a reference to data that has been loaded to a texture unit.\n\nSide note: On iOS devices this data type can only be used in the fragment shader since they don't have texture image units that can be accessed by the vertex shader.",
+    "kind": "Variable",
+    "if": "empty"
+  },
+  "struct": {
+    "desc": "```glsl\nstruct matStruct {\n    vec4 ambientColor; \n    vec4 diffuseColor;\n    vec4 specularColor;\n    float specularExponent;\n} newMaterial;\n\nnewMaterial = matStruct(vec4(0.1, 0.1, 0.1, 1.0),\n                        vec4(1.0, 0.0, 0.0, 1.0),\n                        vec4(0.7, 0.7, 0.7, 1.0),\n                        50.0);\n```\nThe data type `struct` is used to declare custom data structures based on standard types. A constructor for the structure with the same name is created automatically. The declaration of a variable (in this case \"newMaterial\") is optional.\n\nSide note: There has to be an exact correspondence of the arguments of the constructor and the elements of the structure.\n\n```glsl\nvec4 ambientColor = newMaterial.ambientColor; \nvec4 diffuseColor = newMaterial.diffuseColor;\nvec4 specularColor = newMaterial.specularColor;\nfloat specularExponent = newMaterial.specularExponent;\n```\n\nThe elements of a structure can be accessed using the dot-operator.",
+    "kind": "Variable",
+    "if": "empty",
+    "insertText": "struct $1 \n{\n\t$0\n};"
+  }
+}

@@ -6,11 +6,13 @@ import {
   CompletionItem,
   Range,
   MarkdownString,
-  CompletionItemKind
+  CompletionItemKind,
+  SnippetString
 } from 'vscode';
 
 // qualifiers description source: http://www.shaderific.com/glsl-qualifiers
-import qualifiersRaw from './data/qualifiers.json';
+// types description source: http://www.shaderific.com/glsl-types
+import rawCompletionItems from './data/completionItems.json';
 
 type States = 'empty' | 'parameter';
 
@@ -50,15 +52,16 @@ export class GLSLCompletions implements CompletionItemProvider {
   }
 
   private getCompletions() {
-    for (const key in qualifiersRaw) {
+    for (const key in rawCompletionItems) {
       // @ts-ignore
-      if (qualifiersRaw.hasOwnProperty(key) && typeof qualifiersRaw[key] === 'object') {
+      if (rawCompletionItems.hasOwnProperty(key) && typeof rawCompletionItems[key] === 'object') {
         // @ts-ignore
-        const qualifier = qualifiersRaw[key];
+        const rawItem = rawCompletionItems[key];
         const item = new CompletionItem(key);
-        item.kind = CompletionItemKind.Keyword;
-        item.documentation = new MarkdownString(qualifier.desc);
-        this.checkStateAndPushItem(qualifier.if, item);
+        item.kind = (CompletionItemKind[rawItem.kind] as unknown) as any;
+        item.insertText = new SnippetString(rawItem.insertText || `${key} `);
+        item.documentation = new MarkdownString(rawItem.desc);
+        this.checkStateAndPushItem(rawItem.if, item);
       }
     }
   }

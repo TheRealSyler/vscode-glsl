@@ -23,6 +23,39 @@
           "type": "string",
           "description": "description"
         },
+        "insertText": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Text",
+            "Method",
+            "Function",
+            "Constructor",
+            "Field",
+            "Variable",
+            "Class",
+            "Interface",
+            "Module",
+            "Property",
+            "Unit",
+            "Value",
+            "Enum",
+            "Keyword",
+            "Snippet",
+            "Color",
+            "Reference",
+            "File",
+            "Folder",
+            "EnumMember",
+            "Constant",
+            "Struct",
+            "Event",
+            "Operator",
+            "TypeParameter"
+          ]
+        },
         "if": {
           "anyOf": [
             {
@@ -41,7 +74,7 @@
           "description": "is added if the current state is equal to if"
         }
       },
-      "required": ["desc", "if"]
+      "required": ["desc", "if", "kind"]
     }
   },
   "additionalProperties": false
