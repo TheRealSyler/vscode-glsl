@@ -1,0 +1,48 @@
+{
+  "title": "JSON schema for Autocompletion Data",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "patternProperties": {
+    "^.*$": {
+      "$ref": "#/definitions/item"
+    }
+  },
+  "definitions": {
+    "states": {
+      "enum": ["parameter", "empty"]
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "desc": {
+          "type": "string",
+          "description": "description"
+        },
+        "if": {
+          "anyOf": [
+            {
+              "type": "string",
+              "$ref": "#/definitions/states"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "$ref": "#/definitions/states"
+              }
+            }
+          ],
+
+          "description": "is added if the current state is equal to if"
+        }
+      },
+      "required": ["desc", "if"]
+    }
+  },
+  "additionalProperties": false
+}

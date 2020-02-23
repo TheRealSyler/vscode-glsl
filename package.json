@@ -1,0 +1,60 @@
+{
+  "name": "vscode-glsl",
+  "displayName": "GLSL",
+  "description": "Adds autocompletion for GLSL",
+  "version": "0.0.1",
+  "icon": "resources/images/icon.png",
+  "publisher": "Syler",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheRealSyler/gitignore"
+  },
+  "engines": {
+    "vscode": "^1.40.0"
+  },
+  "activationEvents": [
+    "onLanguage:glsl"
+  ],
+  "categories": [
+    "Programming Languages"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run build && suf && npm run test",
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development"
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "glsl",
+        "aliases": [
+          "GLSL",
+          "glsl"
+        ],
+        "extensions": [
+          ".vert",
+          ".vs",
+          ".frag",
+          ".fs"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.40.0",
+    "suf-cli": "^0.1.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.4",
+    "tslib": "^1.10.0",
+    "typescript": "^3.6.4",
+    "vscode-test": "^1.2.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "@sorg/log": "^1.0.3"
+  }
+}

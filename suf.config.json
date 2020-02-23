@@ -1,0 +1,25 @@
+{
+  "badges": {
+    "name": "vscode-glsl",
+    "github": "TheRealSyler",
+    "repo": "vscode-glsl",
+    "out": "README.md",
+    "icon": "resources/images/icon.ico",
+    "vscode": "syler.glsl",
+    "badges": [
+      "circleci circleci",
+      "vscV vscode",
+      "vscD vscode",
+      "vscI vscode",
+      "githubLastCommit github",
+      "githubIssues github ?color=lightgrey"
+    ]
+  },
+  "license": {
+    "name": "Leonard Grosoli",
+    "type": "mit",
+    "year": "2020",
+    "out": "README.md",
+    "file": "LICENSE"
+  }
+}
