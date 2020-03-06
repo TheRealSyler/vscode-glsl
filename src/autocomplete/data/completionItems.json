@@ -1,12 +1,18 @@
 {
   "$schema": "./$schema.json",
+  "main": {
+    "desc": "```glsl\nvoid main(void) {}\n```\nThe keyword main is used to define the `main` function of a shader. This function is the entry point for the execution of every vertex and fragment shader. The main function takes no parameters and does not return a value.",
+    "if": "empty",
+    "kind": "Function",
+    "insertText": "void main() {\n\t$0\n}"
+  },
   "const": {
     "if": "empty",
     "kind": "Keyword",
     "desc": "The qualifier `const` is used for variables that are compile-time constants or for function parameters that are `read-only`."
   },
   "attribute": {
-    "if": "empty",
+    "if": "vertex-empty",
     "kind": "Keyword",
     "desc": "The qualifier `attribute` is used to declare variables that are shared between a vertex shader and the OpenGL ES environment. \n\nSince the vertex shader is executed one time for each vertex attributes are used to specify per vertex data. They typically provide data such as the object space position, the normal direction and the texture coordinates of a vertex. Attributes are read-only variables, i.e. their value can not be changed in the vertex shader. \n\nSide note: Since an attribute is never initialized in the shader it has to be loaded with data by the application executing the shader."
   },
@@ -58,7 +64,7 @@
   "void": {
     "desc": "```glsl\nvoid main(void);\nint aFunction(void);\nvoid bFunction(float);\n```\n\nThe data type `void` is used when the parameter list of a function is empty and when a function does not return a value.",
     "if": "empty",
-    "insertText": "void $1 ($2)\n{\n\t$0\n}",
+    "insertText": "void $1($2) {\n\t$0\n}",
     "kind": "Function"
   },
   "bool": {
@@ -150,6 +156,76 @@
     "desc": "```glsl\nstruct matStruct {\n    vec4 ambientColor; \n    vec4 diffuseColor;\n    vec4 specularColor;\n    float specularExponent;\n} newMaterial;\n\nnewMaterial = matStruct(vec4(0.1, 0.1, 0.1, 1.0),\n                        vec4(1.0, 0.0, 0.0, 1.0),\n                        vec4(0.7, 0.7, 0.7, 1.0),\n                        50.0);\n```\nThe data type `struct` is used to declare custom data structures based on standard types. A constructor for the structure with the same name is created automatically. The declaration of a variable (in this case \"newMaterial\") is optional.\n\nSide note: There has to be an exact correspondence of the arguments of the constructor and the elements of the structure.\n\n```glsl\nvec4 ambientColor = newMaterial.ambientColor; \nvec4 diffuseColor = newMaterial.diffuseColor;\nvec4 specularColor = newMaterial.specularColor;\nfloat specularExponent = newMaterial.specularExponent;\n```\n\nThe elements of a structure can be accessed using the dot-operator.",
     "kind": "Variable",
     "if": "empty",
-    "insertText": "struct $1 \n{\n\t$0\n};"
+    "insertText": "struct $1 {\n\t$0\n};"
+  },
+  "gl_Position": {
+    "desc": "```glsl\nhighp vec4 gl_Position;\n```\nThe built-in variable `gl_Position` is used by the vertex shader to hand over the transformed vertex position to the OpenGL ES 2.0 pipeline. The variable is declared as shown above and can be used in the vertex shader for an assignment without prior declaration.\n\nThe values of the position vector are interpreted in clip coordinate space. The vertex shader is responsible to execute all vertex manipulations, e.g. the transformation from object coordinates to clip coordinates.\n\nThe assignment of values to this variable is mandatory for the vertex shader.",
+    "if": "vertex-output",
+    "kind": "Property"
+  },
+  "gl_PointSize": {
+    "desc": "```glsl\nmediump float gl_PointSize;\n```\nThe built-in variable `gl_PointSize` is used by the vertex shader to hand over the point size of a vertex to the OpenGL ES 2.0 pipeline. The variable is declared as shown above and can be used in the vertex shader for an assignment without prior declaration.\n\nThe value of the the point size is interpreted as the radius in pixels of the point sprite. The actual drawing geometry is a quad (a rectangular primitive) that is derived from the position and the radius of the point sprite.\n\nSide note: The value assigned to this variable is only taken into account by the OpenGL ES 2.0 pipeline if the rendered primitives are points. ",
+    "if": "vertex-output",
+    "kind": "Property"
+  },
+  "gl_FragCoord": {
+    "desc": "```glsl\nmediump vec4 gl_FragCoord;\n```\nThe built-in variable `gl_FragCoord` is used by the OpenGL ES 2.0 pipeline to hand over the coordinates of the fragment to the fragment shader. The variable is read-only and the value is assigned by the OpenGL ES 2.0 pipeline.\n\nThe values of the fragment coordinate vector are given in the window coordinate system.",
+    "if": "fragment-input",
+    "kind": "Variable"
+  },
+  "gl_FrontFacing": {
+    "desc": "```glsl\nbool gl_FrontFacing;\n```\nThe built-in variable `gl_FrontFacing` is used by the OpenGL ES 2.0 pipeline to hand over the information to the fragment shader if the fragment is part of a front-facing primitive (triangle). The variable is read-only and the value is assigned by the OpenGL ES 2.0 pipeline.\n\nThe front-facing variable has a boolean value.",
+    "if": "fragment-input",
+    "kind": "Variable"
+  },
+  "gl_PointCoord": {
+    "desc": "```glsl\nmediump int gl_PointCoord;\n```\nThe built-in variable `gl_PointCoord` is used by the OpenGL ES 2.0 pipeline to hand over the coordinates of a point sprite to the fragment shader. The variable is read-only and the value is calculated and assigned by the OpenGL ES 2.0 pipeline based on the position and radius of the point sprite..\n\nSide note: A value for this variable is provided by the OpenGL ES 2.0 pipeline only if the rendered primitives are points. ",
+    "if": "fragment-input",
+    "kind": "Variable"
+  },
+  "gl_FragColor": {
+    "desc": "```glsl\nmediump vec4 gl_FragColor;\n```\nThe built-in variable `gl_FragColor` is used by the fragment shader to hand over the color of the fragment to the OpenGL ES 2.0 pipeline. The variable is pre-declared as shown above that way the variable can be used in the fragment shader for an assignment without prior declaration.\n\nThe values of the color vector are interpreted in the RGBA color space.\n\nThe assignment of values to this variable is mandatory for the fragment shader.",
+    "if": "fragment-output",
+    "kind": "Variable"
+  },
+  "gl_MaxVertexAttribs": {
+    "desc": "```glsl\nconst mediump int gl_MaxVertexAttribs >= 8\n```\nThe built-in constant `gl_MaxVertexAttribs` provides the maximum number of attributes that can be used by the vertex shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 8.",
+    "if": "vertex-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxVertexUniformVectors": {
+    "desc": "```glsl\nconst mediump int gl_MaxVertexUniformVectors >= 128\n```\nThe built-in constant `gl_MaxVertexUniformVectors` provides the maximum number of uniform vectors that can be used by the vertex shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 128.",
+    "if": "vertex-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxVaryingVectors": {
+    "desc": "```glsl\nconst mediump int gl_MaxVaryingVectors >= 8\n```\nThe built-in constant `gl_MaxVaryingVectors` provides the maximum number of varying vectors that can be used by the vertex shader to hand over data to the fragment shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 8.",
+    "if": "vertex-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxVertexTextureImageUnits": {
+    "desc": "```glsl\nconst mediump int gl_MaxVertexTextureImageUnits >= 0\n```\nThe built-in constant `gl_MaxVertexTextureImageUnits` provides the maximum number of texture units that can be used by the vertex shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 0.\n\nSide note: This number is actually 0 on all iOS devices. This is the reason why there is no access to textures data in the vertex shader.",
+    "if": "vertex-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxCombinedTextureImageUnits": {
+    "desc": "```glsl\nconst mediump int gl_MaxCombinedTextureImageUnits >= 8\n```\nThe built-in constant `gl_MaxCombinedTextureImageUnits` provides the maximum number of texture units that are available in the vertex shader or the fragment shader respectivley. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 8.",
+    "if": "vertex-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxTextureImageUnits": {
+    "desc": "```glsl\nconst mediump int gl_MaxTextureImageUnits >= 8\n```\nThe built-in constant `gl_MaxTextureImageUnits` provides the maximum number of texture units that can be used by the fragment shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 8.",
+    "if": "fragment-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxFragmentUniformVectors": {
+    "desc": "```glsl\nconst mediump int gl_MaxFragmentUniformVectors >= 16\n```\nThe built-in constant `gl_MaxFragmentUniformVectors` provides the maximum number of uniform vectors that can be used by the fragment shader. The value of this variable is dependent on the OpenGL ES 2.0 implementation but has to be at least 16.",
+    "if": "fragment-built-in",
+    "kind": "Constant"
+  },
+  "gl_MaxDrawBuffers": {
+    "desc": "```glsl\nconst mediump int gl_MaxDrawBuffers = 1\n```\nThe built-in constant `gl_MaxDrawBuffers` provides the maximum number of the available draw buffers. The value of this variable is 1 for all OpenGL ES 2.0 implementations. This might change in future versions.",
+    "if": "fragment-built-in",
+    "kind": "Constant"
   }
 }

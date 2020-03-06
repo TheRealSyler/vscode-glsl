@@ -13,7 +13,18 @@
   },
   "definitions": {
     "states": {
-      "enum": ["parameter", "empty"]
+      "enum": [
+        "parameter",
+        "empty",
+        "vertex-output",
+        "fragment-output",
+        "fragment-empty",
+        "vertex-empty",
+        "fragment-input",
+        "vertex-input",
+        "vertex-built-in",
+        "fragment-built-in"
+      ]
     },
     "item": {
       "type": "object",

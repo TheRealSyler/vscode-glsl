@@ -19,7 +19,7 @@
     "Programming Languages"
   ],
   "scripts": {
-    "vscode:prepublish": "npm run build && suf && npm run test",
+    "vscode:prepublish": "npm run build && suf",
     "build": "webpack --mode production",
     "watch": "webpack --mode development"
   },

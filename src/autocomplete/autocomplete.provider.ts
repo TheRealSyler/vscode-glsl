@@ -12,18 +12,33 @@ import {
 
 // qualifiers description source: http://www.shaderific.com/glsl-qualifiers
 // types description source: http://www.shaderific.com/glsl-types
+// variable description source: http://www.shaderific.com/glsl-variables
 import rawCompletionItems from './data/completionItems.json';
 
-type States = 'empty' | 'parameter';
+type completionDataTypes =
+  | 'parameter'
+  | 'empty'
+  | 'vertex-output'
+  | 'fragment-output'
+  | 'fragment-empty'
+  | 'vertex-empty'
+  | 'vertex-built-in'
+  | 'fragment-built-in';
 
-type GLSLCompletionData = { [key in States]: CompletionItem[] };
+type GLSLCompletionData = { [key in completionDataTypes]: CompletionItem[] };
 
 export class GLSLCompletions implements CompletionItemProvider {
   context: ExtensionContext;
 
   completionData: GLSLCompletionData = {
     empty: [],
-    parameter: []
+    parameter: [],
+    'fragment-empty': [],
+    'fragment-output': [],
+    'vertex-empty': [],
+    'vertex-output': [],
+    'fragment-built-in': [],
+    'vertex-built-in': []
   };
   constructor(context: ExtensionContext) {
     this.context = context;
@@ -34,7 +49,9 @@ export class GLSLCompletions implements CompletionItemProvider {
     const range = new Range(start, position);
     const currentWord = document.getText(range).trim();
 
-    let state: States = 'empty';
+    const isVertexShader = /^\.?vert$|^\.?vs$/.test(document.languageId);
+
+    let state: completionDataTypes = 'empty';
 
     // if (/^[ \t]*$/.test(currentWord)) {
     //   state = 'empty';
@@ -44,7 +61,7 @@ export class GLSLCompletions implements CompletionItemProvider {
 
     switch (state) {
       case 'empty':
-        completions.push(...this.completionData.empty);
+        completions.push(...this.completionData.empty, ...this.completionData['fragment-built-in']);
         break;
     }
 
@@ -66,24 +83,20 @@ export class GLSLCompletions implements CompletionItemProvider {
     }
   }
 
-  private checkStateAndPushItem(states: States | States[], item: CompletionItem) {
-    if (typeof states === 'string') {
-      this.pushItemToCompletionData(states, item);
-    } else {
-      for (const state of states) {
-        this.pushItemToCompletionData(state, item);
+  private checkStateAndPushItem(
+    types: completionDataTypes | completionDataTypes[],
+    item: CompletionItem
+  ) {
+    if (typeof types === 'string') {
+      if (this.completionData.hasOwnProperty(types)) {
+        this.completionData[types].push(item);
       }
-    }
-  }
-
-  private pushItemToCompletionData(state: States, item: CompletionItem) {
-    switch (state) {
-      case 'empty':
-        this.completionData.empty.push(item);
-        break;
-      case 'parameter':
-        this.completionData.parameter.push(item);
-        break;
+    } else {
+      for (const type of types) {
+        if (this.completionData.hasOwnProperty(type)) {
+          this.completionData[type].push(item);
+        }
+      }
     }
   }
 }
